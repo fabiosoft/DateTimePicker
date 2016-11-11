@@ -11,7 +11,11 @@ import UIKit
 
 @objc public class DateTimePicker: UIView {
     
-    let contentHeight: CGFloat = 310
+    private var _contentHeight: CGFloat = 310
+    
+    public var contentHeight: CGFloat {
+        return _contentHeight
+    }
     
     // public vars
     public var backgroundViewColor: UIColor = .clear {
@@ -117,7 +121,7 @@ import UIKit
         contentView = UIView(frame: CGRect(x: 0,
                                            y: frame.height,
                                            width: frame.width,
-                                           height: contentHeight))
+                                           height: _contentHeight))
         contentView.layer.shadowColor = UIColor(white: 0, alpha: 0.3).cgColor
         contentView.layer.shadowOffset = CGSize(width: 0, height: -2.0)
         contentView.layer.shadowRadius = 1.5
@@ -256,9 +260,9 @@ import UIKit
         // animate to show contentView
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.4, options: .curveEaseIn, animations: {
             self.contentView.frame = CGRect(x: 0,
-                                            y: self.frame.height - self.contentHeight,
+                                            y: self.frame.height - self._contentHeight,
                                             width: self.frame.width,
-                                            height: self.contentHeight)
+                                            height: self._contentHeight)
         }, completion: nil)
     }
     
@@ -340,7 +344,7 @@ import UIKit
             self.contentView.frame = CGRect(x: 0,
                                             y: self.frame.height,
                                             width: self.frame.width,
-                                            height: self.contentHeight)
+                                            height: self._contentHeight)
         }) { (completed) in
             self.completionHandler?(self.selectedDate)
             self.removeFromSuperview()
