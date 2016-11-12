@@ -8,8 +8,15 @@
 
 import UIKit
 
+public enum DateTimePickerPresentationAnimation {
+    case slideToRight
+    case slideToLeft
+    case present
+}
+
 
 @objc public class DateTimePicker: UIView {
+
     
     private var _contentHeight: CGFloat = 310
     
@@ -18,6 +25,9 @@ import UIKit
     }
     
     // public vars
+    public var presentationAnimation: DateTimePickerPresentationAnimation = .present
+    public var dismissAnimation: DateTimePickerPresentationAnimation = .present
+    
     public var backgroundViewColor: UIColor = .clear {
         didSet {
             backgroundColor = backgroundViewColor
@@ -341,10 +351,23 @@ import UIKit
     func dismissView() {
         UIView.animate(withDuration: 0.3, animations: {
             // animate to show contentView
-            self.contentView.frame = CGRect(x: 0,
-                                            y: self.frame.height,
-                                            width: self.frame.width,
-                                            height: self._contentHeight)
+            switch self.dismissAnimation{
+            case .slideToLeft:
+                self.contentView.frame = CGRect(x: -self.frame.width,
+                                                y: self.contentView.frame.origin.y,
+                                                width: self.frame.width,
+                                                height: self._contentHeight)
+            case .slideToRight:
+                self.contentView.frame = CGRect(x: self.frame.width,
+                                                y: self.contentView.frame.origin.y,
+                                                width: self.frame.width,
+                                                height: self._contentHeight)
+            default: //present
+                self.contentView.frame = CGRect(x: 0,
+                                                y: self.frame.height,
+                                                width: self.frame.width,
+                                                height: self._contentHeight)
+            }
         }) { (completed) in
             self.completionHandler?(self.selectedDate)
             self.removeFromSuperview()
