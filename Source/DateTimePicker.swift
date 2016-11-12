@@ -25,8 +25,13 @@ public enum DateTimePickerPresentationAnimation {
     }
     
     // public vars
-    public var presentationAnimation: DateTimePickerPresentationAnimation = .present
     public var dismissAnimation: DateTimePickerPresentationAnimation = .present
+    
+    public var title:String? {
+        didSet{
+            resetDateTitle()
+        }
+    }
     
     public var backgroundViewColor: UIColor = .clear {
         didSet {
@@ -298,9 +303,13 @@ public enum DateTimePickerPresentationAnimation {
         guard dateTitleLabel != nil else {
             return
         }
-        let formatter = DateFormatter()
-        formatter.dateFormat = dateFormat
-        dateTitleLabel.text = formatter.string(from: selectedDate)
+        if let descriptive_title = self.title {
+            dateTitleLabel.text = descriptive_title
+        }else{
+            let formatter = DateFormatter()
+            formatter.dateFormat = dateFormat
+            dateTitleLabel.text = formatter.string(from: selectedDate)
+        }
         dateTitleLabel.sizeToFit()
         dateTitleLabel.center = CGPoint(x: contentView.frame.width / 2, y: 22)
     }
